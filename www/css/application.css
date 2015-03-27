@@ -1,0 +1,164 @@
+/* http://stackoverflow.com/questions/10389429/apply-css-to-data-role-page-in-jquerymobile */
+.ui-page{
+	background-size: 1024px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Control buttons */
+
+.ui-btn {
+  padding: 20px;
+  border: none;
+  height: 80px;
+  background-size: contain !important;
+}
+
+.playBtn {
+	background: transparent url('../img/speaker.png') no-repeat center !important;
+}
+
+.resetBtn {
+  background: transparent url('../img/reset.png') no-repeat center !important;
+}
+
+.recordBtn_off {
+  background: transparent url('../img/mic.png') no-repeat center !important; 
+}
+
+.recordBtn_on {
+	height: 50px !important;
+	background: transparent url("../img/mic-on.png") no-repeat center !important;
+	background-size: contain !important;
+}
+
+.ui-page .ui-header {
+  background: transparent !important;
+  border: none;
+}
+
+/* Pages */
+
+[data-role="page"] {
+  background-color: white;
+}
+
+[data-role="content"] {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  height: 700px;
+  width: 100%;
+}
+
+#Page_01 {
+  background-image: url("../img/Page_01.png");
+}
+
+#Page_02 {
+  background-image: url("../img/Page_02.png");
+}
+
+#Page_03 {
+  background-image: url("../img/Page_03.png");
+}
+
+#Page_04 {
+  background-image: url("../img/Page_04.png");
+}
+
+#Page_05 {
+  background-image: url("../img/Page_05.png");
+}
+
+#Page_06 {
+  background-image: url("../img/Page_06.png");
+}
+
+#Page_07 {
+  background-image: url("../img/Page_07.png");
+}
+
+#Page_08 {
+  background-image: url("../img/Page_08.png");
+}
+
+#Page_09 {
+  background-image: url("../img/Page_09.png");
+}
+
+#Page_10 {
+  background-image: url("../img/Page_10.png");
+}
+
+#Page_11 {
+  background-image: url("../img/Page_11.png");
+}
+
+#Page_12 {
+  background-image: url("../img/Page_12.png");
+}
+
+#Page_13 {
+  background-image: url("../img/Page_13.png");
+}
+
+#Page_14 {
+  background-image: url("../img/Page_14.png");
+}
+
+#Page_15 {
+  background-image: url("../img/Page_15.png");
+}
+
+#Page_16 {
+  background-image: url("../img/Page_16.png");
+}
+
+#Page_17 {
+  background-image: url("../img/Page_17.png");
+}
+
+#Page_18 {
+  background-image: url("../img/Page_18.png");
+}
+
+#Page_19 {
+  background-image: url("../img/Page_19.png");
+}
+
+#Page_20 {
+  background-image: url("../img/Page_20.png");
+}
+
+#Page_21 {
+  background-image: url("../img/Page_21.png");
+}
+
+#Page_22 {
+  background-image: url("../img/Page_22.png");
+}
+
+#Page_23 {
+  background-image: url("../img/Page_23.png");
+}
+
+#Page_24 {
+  background-image: url("../img/Page_24.png");
+}
+
+#Page_25 {
+  background-image: url("../img/Page_25.png");
+}
+
+#Page_26 {
+  background-image: url("../img/Page_26.png");
+}
+
+
+
