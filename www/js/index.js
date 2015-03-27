@@ -17,9 +17,11 @@
  * under the License.
  */
 var app = {
-    // Module scope variable
-    // var animalId,
-    //     extension = ".wav";
+
+    // var currxPage = 0;
+
+    currPage: 0,
+    page_ids: ["Page_01", "Page_02"],
 
     // Application Constructor
     initialize: function() {
@@ -61,11 +63,15 @@ var app = {
         var pages = $("div:jqmData(role='content')");
         pages.each(function(i){
             $("#" + this.id).swipeleft(function() {
-                $("#" + this.id).attr("id", "Page_02");
+                // alert(app.currPage);
+                // app.currPage = app.currPage + 1;
+                ++app.currPage;
+                $("#" + this.id).attr("id", app.page_ids[app.currPage]);
             });
 
             $("#" + this.id).swiperight(function() {
-                $("#" + this.id).attr("id", "Page_01");
+                --app.currPage;
+                $("#" + this.id).attr("id", app.page_ids[app.currPage]);
             });
         });
     }
