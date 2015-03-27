@@ -23,7 +23,6 @@ var app = {
 
     // Application Constructor
     initialize: function() {
-        // alert("inside initialize");
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -31,14 +30,6 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        // alert("inside bindEvents");
-        //This is needed so that we can debug in chrome in cloud
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-            document.addEventListener("deviceready", app.onDeviceReady, false);
-        } else {
-            app.onDeviceReady();
-        }
-    
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
@@ -46,7 +37,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        // alert("inside onDeviceReady");
         app.start();
         app.receivedEvent('deviceready');
     },
@@ -69,34 +59,15 @@ var app = {
     // Change page on swipe
     registerPageSwipeHandlers: function() {
         var pages = $("div:jqmData(role='content')");
-        // var pages = ["Page_01", "Page_02"];
-        app.iterifyArray(pages);
         pages.each(function(i){
             $("#" + this.id).swipeleft(function() {
-                //var nextPageId = pages.next().id;
-                var nextPageId = pages[++i].id;
-                var pageDiv = 
-                $("#" + this.id).attr("id", nextPageId);
-                //$("#" + this.id).attr("id", "Page_02");
+                $("#" + this.id).attr("id", "Page_02");
             });
 
             $("#" + this.id).swiperight(function() {
-                // $("#" + this.id).attr("id", "Page_01");
-                // alert(i);
-                // i = i - 1;
-                // alert(i);
-                // var prevPageId = pages[0].id;
-                // alert(prevPageId);
-                // $("#" + this.id).attr("id", prevPageId);
+                $("#" + this.id).attr("id", "Page_01");
             });
         });
-    },
-    // Add next and prev to an array
-    iterifyArray: function(arr) {
-        // alert("inside iterifyArray");
-        var cur = 0;
-        arr.next = (function(){ return (++cur >= this.length) ? false : this[cur]; });
-        arr.prev = (function(){ return (--cur < 0) ? false : this[cur]; });
-        return arr;
     }
+
 };
