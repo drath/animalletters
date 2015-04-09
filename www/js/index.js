@@ -100,6 +100,7 @@ var app = {
                 ++app.currPage;
                 if (app.currPage < app.page_ids.length) {
                     $("#" + this.id).attr("id", app.page_ids[app.currPage]);
+                    $("#" + this.id + "_audio").attr("id", app.page_ids[app.currPage + "_audio"]);
                 } else {
                     alert("Last page");
                 }

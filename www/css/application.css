@@ -1,3 +1,6 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
+@import "//code.jquery.com/ui/1.9.1/themes/base/jquery.ui.theme.css";
+
 /* http://stackoverflow.com/questions/10389429/apply-css-to-data-role-page-in-jquerymobile */
 .ui-page{
 	background-size: 1024px;
@@ -19,9 +22,9 @@ html, body {
   background-size: contain !important;
 }
 
-.playBtn {
-	background: transparent url('../img/speaker.png') no-repeat center !important;
-}
+/*.playBtn {*/
+/*	background: transparent url('../img/speaker.png') no-repeat center !important;*/
+/*}*/
 
 .resetBtn {
   background: transparent url('../img/reset.png') no-repeat center !important;
@@ -55,6 +58,9 @@ html, body {
   height: 700px;
   width: 100%;
 }
+
+/* Font */
+
 
 #Page_01 {
   background-image: url("../img/Page_01.png");

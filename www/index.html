@@ -28,6 +28,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" href="css-ext/jquery.mobile-1.4.4.css" />
         <link rel="stylesheet" type="text/css" href="css/application.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Hello World</title>
     </head>
@@ -37,17 +38,18 @@
                 <div data-role="navbar" data-iconpos="bottom">
                     <ul>
                         <li>
-                            <a href="#" class="ui-btn ui-nodisc-icon playBtn"></a>
+                            <a href="#" class="ui-btn ui-nodisc-icon playBtn"><i class="fa fa-play-circle-o fa-5x"></i></a>
                         </li>
                         <li>
-                            <a href="#" class="ui-btn ui-nodisc-icon recordBtn_off" id="recordBtn" ></a>
+                            <a href="#" class="ui-btn ui-nodisc-icon"><i class="fa fa-microphone fa-5x"></i></a>
                             <p id="audio_position" style="text-align:center"></p>
                         </li>
-                        <li><a href="#" class="ui-btn ui-nodisc-icon resetBtn"></a></li>
+                        <li><a href="#" class="ui-btn ui-nodisc-icon"><i class="fa fa-undo fa-5x"></i></a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div>
             <div data-role="content" id="Page_01">
+                <audio id="Page_01_audio" src="audio/crow_ss.mp3" type="audio/mpeg"></audio>
             </div>
         </div>
 
