@@ -22,13 +22,6 @@ html, body {
   background-size: contain !important;
 }
 
-/*.playBtn {*/
-/*	background: transparent url('../img/speaker.png') no-repeat center !important;*/
-/*}*/
-
-.resetBtn {
-  background: transparent url('../img/reset.png') no-repeat center !important;
-}
 
 .recordBtn_off {
   background: transparent url('../img/mic.png') no-repeat center !important; 
