@@ -20,7 +20,7 @@ var app = {
 
     // var currxPage = 0;
 
-    currPage: 0,
+    currPageIndex: 0,
     page_ids: [ "Page_01", 
                 "Page_02",
                 "Page_03",
@@ -96,22 +96,20 @@ var app = {
         var pages = $("div:jqmData(role='content')");
         pages.each(function(i){
             $("#" + this.id).swipeleft(function() {
-                // alert(app.currPage);
-                // app.currPage = app.currPage + 1;
-                ++app.currPage;
-                if (app.currPage < app.page_ids.length) {
-                    $("#" + this.id).attr("id", app.page_ids[app.currPage]);
-                    
-                    $("#" + this.id + "_audio").attr("id", app.page_ids[app.currPage + "_audio"]);
+                // alert(app.currPageIndex);
+                // app.currPageIndex = app.currPageIndex + 1;
+                ++app.currPageIndex;
+                if (app.currPageIndex < app.page_ids.length) {
+                    $("#" + this.id).attr("id", app.page_ids[app.currPageIndex]);
                 } else {
                     alert("Last page");
                 }
             });
 
             $("#" + this.id).swiperight(function() {
-                --app.currPage;
-                if (app.currPage >= 0) {
-                    $("#" + this.id).attr("id", app.page_ids[app.currPage]);   
+                --app.currPageIndex;
+                if (app.currPageIndex >= 0) {
+                    $("#" + this.id).attr("id", app.page_ids[app.currPageIndex]);   
                 } else {
                     alert("First page");
                 }
@@ -121,7 +119,15 @@ var app = {
     // Play, Record and Reset Btn Handlers
     registerBtnHandlers: function() {
         $(".playBtn").on("click", function(event){
-            alert("You clicked the play button");
+            // The audio filename is of the format [id].mp3
+            var url = "audio/" + app.page_ids[app.currPageIndex] + ".mp3";
+            if (device.platform === "Android") {
+                url = "/android_asset/www/" + url;
+            }
+
+            // alert(url);
+            var my_media = new Media(url,null, null);
+            my_media.play();
         });
         $(".recordBtn").on("click", function(event){
             $(this).toggleClass("fa-spinner fa-spin");

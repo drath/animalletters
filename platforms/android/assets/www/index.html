@@ -26,19 +26,36 @@
         <meta name="msapplication-tap-highlight" content="no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" href="css-ext/jquery.mobile-1.4.4.css" />
+        <link rel="stylesheet" type="text/css" href="css/application.css" />
+        <link rel="stylesheet" type="text/css" href="css-ext/font-awesome-4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Animal Letters</title>
     </head>
     <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+        <div data-role="page" data-first="true">
+            <div data-role="header" id="myheader">
+                <div data-role="navbar" data-iconpos="bottom">
+                    <ul>
+                        <li>
+                            <a href="#" class="ui-btn ui-nodisc-icon playBtn"><i class="fa fa-play-circle-o fa-5x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#" class="ui-btn ui-nodisc-icon"><i class="fa fa-microphone fa-5x recordBtn"></i></a>
+                            <p id="audio_position" style="text-align:center"></p>
+                        </li>
+                        <li><a href="#" class="ui-btn ui-nodisc-icon undoBtn"><i class="fa fa-undo fa-5x"></i></a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div>
+            <div data-role="content" id="Page_01">
             </div>
         </div>
+
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script src="js-ext/jquery-1.11.1.min.js"></script>
+        <script src="js-ext/jquery.mobile-1.4.4.min.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
