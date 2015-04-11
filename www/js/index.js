@@ -90,7 +90,7 @@ var app = {
         // http://stackoverflow.com/questions/6193016/how-to-prevent-app-running-in-phone-gap-from-scrolling-vertically
 
         // FIXME: THIS BREAKS THE SCROLLING IN RIPPLE. WORKS FINE ON THE DEVICE!
-        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+        //document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
         
         
         // $.mobile.defaultPageTransition = 'slide';
@@ -102,23 +102,11 @@ var app = {
         var pages = $("div:jqmData(role='content')");
         pages.each(function(i){
             $("#" + this.id).swipeleft(function() {
-                // alert(app.currPageIndex);
-                // app.currPageIndex = app.currPageIndex + 1;
-                ++app.currPageIndex;
-                if (app.currPageIndex < app.page_ids.length) {
-                    $("#" + this.id).attr("id", app.page_ids[app.currPageIndex]);
-                } else {
-                    alert("Last page");
-                }
+                app.goToNextPage();
             });
 
             $("#" + this.id).swiperight(function() {
-                --app.currPageIndex;
-                if (app.currPageIndex >= 0) {
-                    $("#" + this.id).attr("id", app.page_ids[app.currPageIndex]);   
-                } else {
-                    alert("First page");
-                }
+                app.goToPrevPage();
             });
         });
     },
@@ -142,6 +130,28 @@ var app = {
         $(".undoBtn").on("click", function(event){
             alert("You clicked the reset button");
         });
+        $(".flipNext").on("click", function(event){
+            app.goToNextPage();
+        });
+        $(".flipPrev").on("click", function(event){
+            app.goToPrevPage();
+        });
+    },
+    goToNextPage: function() {
+        if (app.currPageIndex < app.page_ids.length -1 ) {
+            var pageElement = $("#" + app.page_ids[app.currPageIndex]); 
+            pageElement.attr("id", app.page_ids[++app.currPageIndex]);
+        } else {
+            alert("Last page: " + app.currPageIndex + " " + app.page_ids[app.currPageIndex]);
+        }
+    },
+    goToPrevPage: function() {
+        if (app.currPageIndex > 0) {
+            var pageElement = $("#" + app.page_ids[app.currPageIndex]);
+            pageElement.attr("id", app.page_ids[--app.currPageIndex]);   
+        } else {
+            alert("First page: " + app.currPageIndex);
+        }
     }
 
 };

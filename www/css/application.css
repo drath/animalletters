@@ -42,6 +42,14 @@ html, body {
   border: none;
 }
 
+.flip {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center; 
+  width: 100px; 
+  height: 600px;
+}
+
 /* Pages */
 
 /*[data-role="navbar"] {
