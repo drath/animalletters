@@ -90,7 +90,7 @@ var app = {
         // http://stackoverflow.com/questions/6193016/how-to-prevent-app-running-in-phone-gap-from-scrolling-vertically
 
         // FIXME: THIS BREAKS THE SCROLLING IN RIPPLE. WORKS FINE ON THE DEVICE!
-        //document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
         
         
         // $.mobile.defaultPageTransition = 'slide';
