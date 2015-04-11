@@ -86,8 +86,11 @@ var app = {
     },
     // Start function
     start: function() {
-        //animalId = $.mobile.activePage.attr('id');
-        $.mobile.defaultPageTransition = 'slide';
+        // Prevent vertical scrolling
+        // http://stackoverflow.com/questions/6193016/how-to-prevent-app-running-in-phone-gap-from-scrolling-vertically
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+        
+        // $.mobile.defaultPageTransition = 'slide';
         app.registerPageSwipeHandlers();
         app.registerBtnHandlers();
     },
