@@ -1,11 +1,6 @@
 @import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
 @import "//code.jquery.com/ui/1.9.1/themes/base/jquery.ui.theme.css";
 
-/* http://stackoverflow.com/questions/10389429/apply-css-to-data-role-page-in-jquerymobile */
-.ui-page{
-	background-size: 1024px;
-}
-
 html, body {
     margin: 0;
     padding: 0;
@@ -13,13 +8,22 @@ html, body {
     overflow: hidden;
 }
 
+/* http://stackoverflow.com/questions/10389429/apply-css-to-data-role-page-in-jquerymobile */
+.ui-page{
+  background-color: white;
+}
+
 /* Control buttons */
 
 .ui-btn {
-  padding: 20px;
+  padding: 5px;
   border: none;
-  height: 80px;
+/*  height: 80px;*/
   background-size: contain !important;
+}
+
+.ui-btn.ui-nodisc-icon {
+  background-color: white; 
 }
 
 
@@ -40,15 +44,17 @@ html, body {
 
 /* Pages */
 
-[data-role="page"] {
+/*[data-role="navbar"] {
   background-color: white;
-}
+  background: transparent !important;
+  height: 5px;
+}*/
 
 [data-role="content"] {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom;
-  height: 700px;
+  height: 600px;
   width: 100%;
 }
 

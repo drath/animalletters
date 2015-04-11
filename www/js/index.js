@@ -86,9 +86,12 @@ var app = {
     },
     // Start function
     start: function() {
-        // Prevent vertical scrolling
+        // Prevent vertical scrolling - problem seen on devices only. Works fine on chrome without this.
         // http://stackoverflow.com/questions/6193016/how-to-prevent-app-running-in-phone-gap-from-scrolling-vertically
-        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+
+        // FIXME: THIS BREAKS THE SCROLLING IN RIPPLE. WORKS FINE ON THE DEVICE!
+        //document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+        
         
         // $.mobile.defaultPageTransition = 'slide';
         app.registerPageSwipeHandlers();
