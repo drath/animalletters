@@ -1,3 +1,5 @@
+/* Author: Devendra. All copyright reserved (c) 2015 */
+
 @import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
 @import "//code.jquery.com/ui/1.9.1/themes/base/jquery.ui.theme.css";
 
@@ -8,9 +10,23 @@ html, body {
     overflow: hidden;
 }
 
-/* http://stackoverflow.com/questions/10389429/apply-css-to-data-role-page-in-jquerymobile */
+/* Page and Header */
+
 .ui-page{
   background-color: white;
+}
+
+.ui-page .ui-header {
+  background: transparent !important;
+  border: none;
+}
+
+[data-role="content"] {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  height: 700px;
+  /*width: 100%;*/
 }
 
 /* Control buttons */
@@ -18,28 +34,11 @@ html, body {
 .ui-btn {
   padding: 5px;
   border: none;
-/*  height: 80px;*/
   background-size: contain !important;
 }
 
 .ui-btn.ui-nodisc-icon {
   background-color: white; 
-}
-
-
-.recordBtn_off {
-  background: transparent url('../img/mic.png') no-repeat center !important; 
-}
-
-.recordBtn_on {
-	height: 50px !important;
-	background: transparent url("../img/mic-on.png") no-repeat center !important;
-	background-size: contain !important;
-}
-
-.ui-page .ui-header {
-  background: transparent !important;
-  border: none;
 }
 
 .flip {
@@ -50,24 +49,7 @@ html, body {
   height: 600px;
 }
 
-/* Pages */
-
-/*[data-role="navbar"] {
-  background-color: white;
-  background: transparent !important;
-  height: 5px;
-}*/
-
-[data-role="content"] {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: bottom;
-  height: 650px;
-  width: 100%;
-}
-
-/* Font */
-
+/* Page Backgrounds */
 
 #Page_01 {
   background-image: url("../img/Page_01.jpg");
@@ -173,5 +155,16 @@ html, body {
   background-image: url("../img/Page_26.jpg");
 }
 
+/* Old Stuff */
 
+/*.recordBtn_off {
+  background: transparent url('../img/mic.png') no-repeat center !important; 
+}
 
+.recordBtn_on {
+  height: 50px !important;
+  background: transparent url("../img/mic-on.png") no-repeat center !important;
+  background-size: contain !important;
+}
+
+*/
