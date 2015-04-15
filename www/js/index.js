@@ -20,7 +20,7 @@ var app = {
 
     // var currxPage = 0;
     myRecorder: null,
-    extension: "wav",
+    extension: "mp3",
     currPageIndex: 0,
     currFilename: null,
     device: null,
@@ -76,9 +76,6 @@ var app = {
     onDeviceReady: function() {
         app.start();
         app.receivedEvent('deviceready');
-        
-        // The device is a global object intialized by the device plugin
-        app.device = device;
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -120,29 +117,27 @@ var app = {
     // Play, Record and Reset Btn Handlers
     registerBtnHandlers: function() {
         $(".playBtn").on("click", function(event){
-            // The audio filename is of the format [id].mp3
-            var url = "audio/" + app.page_ids[app.currPageIndex] + ".mp3";
-            if (app.device.platform === "Android") {
-                url = "/android_asset/www/" + url;
+            var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
+            if (device.platform === "Android") {
+                filename = cordova.file.externalDataDirectory + filename;
             }
 
-            // alert(url);
-            var my_media = new Media(url,null, null);
-            my_media.play();
+            // If custom recording exists, play it. Else play default sound.
+            window.resolveLocalFileSystemURL(   filename, 
+                                                app.playCustom, 
+                                                app.playDefault);
         });
         $(".recordBtn").on("click", function(event){
             $(this).toggleClass("fa-spinner fa-spin");
             $(this).toggleClass("fa-microphone");
             
             if ($(this).attr("class").indexOf("fa-spin") >= 0) {
-                // Start recording
-                alert("Will record sound for index: " + app.currPageIndex);
-                
+                // Start recording                
                 app.currFilename = app.page_ids[app.currPageIndex] + "." + app.extension;
                 
                 // For android, we need to include the correct path. 
                 var filePath = "";
-                if (app.device.platform === "Android") {
+                if (device.platform === "Android") {
                     filePath = cordova.file.externalDataDirectory;
                     app.currFilename = filePath + app.currFilename;
                 }
@@ -150,9 +145,8 @@ var app = {
                 if (app.myRecorder) {
                     app.myRecorder.release();
                 }
-                
-                if (app.device.platform === "Android") {
-                    alert("Android: Will record to: " + app.currFilename);
+               
+                if (device.platform === "Android") {
                     app.myRecorder = new Media(app.currFilename, 
                                         app.onMediaSuccessCallback(),
                                         app.onMediaErrorCallback());
@@ -168,7 +162,7 @@ var app = {
                 }
                 
             } else {
-                alert("stop recording");
+                //app.stopRecording();
             }
         });
         $(".undoBtn").on("click", function(event){
@@ -198,10 +192,10 @@ var app = {
         }
     },
     onMediaSuccessCallback: function() {
-        alert("onMediaSuccessCallback");
+        //alert("onMediaSuccessCallback");
     },
     onMediaErrorCallback: function() {
-        alert("onMediaErrorCallback");
+        //alert("onMediaErrorCallback");
     },
     /* for iOS only */
     onSuccessFileSystem: function(fileSystem) {
@@ -217,9 +211,7 @@ var app = {
     },
     /* common function that starts the recording */
     recordNow: function() {
-        alert("inside recordNow");
         if (app.myRecorder) {
-            alert("Will startRecord");
             app.myRecorder.startRecord();
         } else {
             alert("myRecorder is NULL in startRecord");
@@ -232,8 +224,10 @@ var app = {
         // Stop recording after 5 sec
 	    var progressTimer = setInterval(function() {
 	        app.recTime = app.recTime + 1;
+            // TBD: Update the counter
 	        if (app.recTime >= 5) {
-	            alert("Stopping recording");
+                clearInterval(progressTimer);
+                progressTimer = null;
 	        	app.stopRecording();
 	        	return;
 	        }
@@ -246,10 +240,28 @@ var app = {
 			app.myRecorder.stopRecord();
 			app.myRecorder.release();
 			app.myRecorder = null;
-			app.clearProgressTimer();
-			$('#recordBtn').toggleClass("fa-spin fa-spinner");
-			alert("Recording stopped!");
+			$('.recordBtn').toggleClass("fa-spinner fa-spin");
+            $('.recordBtn').attr("class", "fa fa-microphone fa-4x recordBtn");
 		}
+    },
+    // If the child has recorded his own voice
+    playCustom: function() {
+        // audio filename for this page
+        var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
+        if (device.platform === "Android") {
+            filename = cordova.file.externalDataDirectory + filename;
+        }
+        var my_media = new Media(filename,null, null);
+        my_media.play();
+    },
+    // My voice! :)
+    playDefault: function() {
+        var url = "audio/" + $("div[data-role='content']").attr("id") + "." + app.extension;
+        if (device.platform === "Android") {
+            url = "/android_asset/www/" + url; 
+        }
+        var my_media = new Media(url,null, null);
+        my_media.play();
     }
 
 };
