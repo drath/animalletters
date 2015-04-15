@@ -122,7 +122,7 @@ var app = {
 
         // If custom recording exists, play it. Else play default sound.
         window.resolveLocalFileSystemURL(filename, app.playCustom, app.playDefault);
-      });
+      }); 
       $(".recordBtn").on("click", function (event){
         $(this).toggleClass("fa-spinner fa-spin");
         $(this).toggleClass("fa-microphone");
@@ -228,7 +228,6 @@ var app = {
         	return;
         }
 	    }, 1000);
-	    
     },
     /* common function that stops the recording */
     stopRecording: function () {
@@ -254,7 +253,7 @@ var app = {
     playDefault: function () {
       var url = "audio/" + $("div[data-role='content']").attr("id") + "." + app.extension;
       if (device.platform === "Android") {
-          url = "/android_asset/www/" + url; 
+          url = "/android_asset/www/" + url;
       }
       var my_media = new Media(url,null, null);
       my_media.play();
