@@ -123,7 +123,7 @@ var app = {
         // If custom recording exists, play it. Else play default sound.
         window.resolveLocalFileSystemURL(filename, app.playCustom, app.playDefault);
       }); 
-      $(".recordBtn").on("click", function (event){
+      $(".recordBtn").on("click", function (event) {
         $(this).toggleClass("fa-spinner fa-spin");
         $(this).toggleClass("fa-microphone");
         if ($(this).attr("class").indexOf("fa-spin") >= 0) {
@@ -157,7 +157,7 @@ var app = {
         }
       });
       $(".undoBtn").on("click", function (event){
-        alert("Setting the file back to default");
+        alert("You clicked the reset button");
         var externalFilename = app.getExternalFilename();
 
         // Does this exist?
