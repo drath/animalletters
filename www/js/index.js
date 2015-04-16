@@ -157,7 +157,7 @@ var app = {
         }
       });
       $(".undoBtn").on("click", function (event){
-        alert("You clicked the reset button");
+        alert("Setting the file back to default");
         var externalFilename = app.getExternalFilename();
 
         // Does this exist?
