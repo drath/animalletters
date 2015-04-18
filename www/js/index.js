@@ -20,7 +20,7 @@ var app = {
 
     // var currxPage = 0;
     myRecorder: null,
-    extension: "mp3",
+    extension: "wav",
     currPageIndex: 0,
     currFilename: null,
     device: null,
