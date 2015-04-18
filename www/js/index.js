@@ -124,9 +124,20 @@ var app = {
         window.resolveLocalFileSystemURL(filename, app.playCustom, app.playDefault);
       }); 
       $(".recordBtn").on("click", function (event) {
-        $(this).toggleClass("fa-spinner fa-spin");
-        $(this).toggleClass("fa-microphone");
-        if ($(this).attr("class").indexOf("fa-spin") >= 0) {
+        // $(this).toggleClass("fa-spinner fa-spin");
+        // $(this).toggleClass("fa-microphone");
+        $("#micRecording").toggleClass("fa fa-x fa-circle");
+
+        // $( ".fa-circle" ).animate({
+        //   opacity: 0.25,
+        //   left: "+=50",
+        //   height: "toggle"
+        // }, 5000, function() {
+        //   // Animation complete.
+        // });
+        app.blinkMic();
+
+        if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
           // Start recording                
           app.currFilename = app.page_ids[app.currPageIndex] + "." + app.extension;
           // For android, we need to include the correct path. 
@@ -220,11 +231,12 @@ var app = {
       // Stop recording after 5 sec
 	    var progressTimer = setInterval (function () {
         app.recTime = app.recTime + 1;
-        // TBD: Update the counter
+        app.setRecordingText(app.recTime + " sec");
         if (app.recTime >= 5) {
           clearInterval(progressTimer);
           progressTimer = null;
         	app.stopRecording();
+          app.setRecordingText("");
         	return;
         }
 	    }, 1000);
@@ -235,8 +247,9 @@ var app = {
   			app.myRecorder.stopRecord();
   			app.myRecorder.release();
   			app.myRecorder = null;
-  			$('.recordBtn').toggleClass("fa-spinner fa-spin");
-        $('.recordBtn').attr("class", "fa fa-microphone fa-4x recordBtn");
+  			// $('.recordBtn').toggleClass("fa-spinner fa-spin");
+        //$('.recordBtn').attr("class", "fa fa-microphone fa-4x recordBtn");
+        $("#micRecording").toggleClass("fa fa-x fa-circle");
 	    }
     },
     // If the child has recorded his own voice
@@ -278,5 +291,12 @@ var app = {
     },
     failToDelete: function() {
       alert("inside failToDelete, file does not exist");
+    },
+    blinkMic: function() {
+      $('.fa-circle').delay(100).fadeTo(100,0.5).delay(100).fadeTo(100,1, app.blinkMic);
+    },
+    // Displays 1...2...3...4...5
+    setRecordingText: function (text){
+      $('#audio_position').text(text);
     }
 };

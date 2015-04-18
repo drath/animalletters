@@ -49,6 +49,12 @@ html, body {
   height: 650px;
 }
 
+/* Other stuff */
+
+#micRecording {
+  color: red;
+}
+
 /* Page Backgrounds */
 
 #Page_01 {
@@ -154,6 +160,9 @@ html, body {
 #Page_26 {
   background-image: url("../img/Page_26.jpg");
 }
+
+
+
 
 /* Old Stuff */
 
