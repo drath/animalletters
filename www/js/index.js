@@ -206,6 +206,7 @@ var app = {
       app.myRecorder = new Media( fileEntry.fullPath, 
                               app.onMediaSuccessCallback, 
                               app.onMediaErrorCallback);
+      app.recordNow();
     },
     /* common function that starts the recording */
     recordNow: function () {
