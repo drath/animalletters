@@ -124,17 +124,7 @@ var app = {
         window.resolveLocalFileSystemURL(filename, app.playCustom, app.playDefault);
       }); 
       $(".recordBtn").on("click", function (event) {
-        // $(this).toggleClass("fa-spinner fa-spin");
-        // $(this).toggleClass("fa-microphone");
         $("#micRecording").toggleClass("fa fa-x fa-circle");
-
-        // $( ".fa-circle" ).animate({
-        //   opacity: 0.25,
-        //   left: "+=50",
-        //   height: "toggle"
-        // }, 5000, function() {
-        //   // Animation complete.
-        // });
         app.blinkMic();
 
         if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
@@ -168,13 +158,14 @@ var app = {
         }
       });
       $(".undoBtn").on("click", function (event){
-        alert("You clicked the reset button");
         var externalFilename = app.getExternalFilename();
 
         // Does this exist?
         window.resolveLocalFileSystemURL(   externalFilename,
                                             app.gotRemoveFileEntry,
                                             app.failToDelete);
+
+        window.plugins.toast.showLongTop("Replaced recording with the default one", null, null);
 
       });
       $(".flipNext").on("click", function (event){
@@ -247,8 +238,6 @@ var app = {
   			app.myRecorder.stopRecord();
   			app.myRecorder.release();
   			app.myRecorder = null;
-  			// $('.recordBtn').toggleClass("fa-spinner fa-spin");
-        //$('.recordBtn').attr("class", "fa fa-microphone fa-4x recordBtn");
         $("#micRecording").toggleClass("fa fa-x fa-circle");
 	    }
     },
@@ -279,18 +268,15 @@ var app = {
       return filename;
     },
     gotRemoveFileEntry: function (fileEntry) {
-      alert(fileEntry);
       fileEntry.remove(app.deleteFileSuccess, app.deleteFilefail);
     },
     deleteFileSuccess: function () {
-      alert("File deleted successfully");
     },
     deleteFilefail: function(error) {
       alert("inside deleteFilefail");
       alert("Failed to delete a file: " + error.code);
     },
     failToDelete: function() {
-      alert("inside failToDelete, file does not exist");
     },
     blinkMic: function() {
       $('.fa-circle').delay(100).fadeTo(100,0.5).delay(100).fadeTo(100,1, app.blinkMic);
