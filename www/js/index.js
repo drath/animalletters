@@ -199,7 +199,8 @@ var app = {
     },
     /* for iOS only */
     onSuccessFileSystem: function (fileSystem) {
-      fileSystem.root.getFile(app.currFilename, { create: true, exclusive: false }, app.onOK_GetFile, null);
+      var iOSFilename = "documents://" + app.currFilename;
+      fileSystem.root.getFile(iOSFilename, { create: true, exclusive: false }, app.onOK_GetFile, null);
     },
     /* for iOS only */
     onOK_GetFile: function (fileEntry) {
