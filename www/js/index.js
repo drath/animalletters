@@ -116,8 +116,12 @@ var app = {
     registerBtnHandlers: function () {
       $(".playBtn").on("click", function (){
         var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
+
+        // Get the custom location first
         if (device.platform === "Android") {
           filename = cordova.file.externalDataDirectory + filename;
+        } else {
+          filename = cordova.file.applicationStorageDirectory + "Documents/" + filename;
         }
 
         // If custom recording exists, play it. Else play default sound.
@@ -191,20 +195,24 @@ var app = {
         alert("First page: " + app.currPageIndex);
       }
     },
-    onMediaSuccessCallback: function () {
-      //alert("onMediaSuccessCallback");
-    },
-    onMediaErrorCallback: function () {
-      //alert("onMediaErrorCallback");
-    },
     /* for iOS only */
     onSuccessFileSystem: function (fileSystem) {
-      var iOSFilename = "documents://" + app.currFilename;
-      fileSystem.root.getFile(iOSFilename, { create: true, exclusive: false }, app.onOK_GetFile, null);
+      fileSystem.root.getFile(app.currFilename,
+                              { create: true, exclusive: false },
+                              app.onOK_GetFile,
+                              function () {
+                              alert("Failed to create file!");
+                              });
+    },
+    onMediaSuccessCallback: function () {
+      alert("onMediaSuccessCallback: Recording complete!");
+    },
+    onMediaErrorCallback: function (error) {
+      alert("onMediaErrorCallback: Recording failed: " + error.message);
     },
     /* for iOS only */
     onOK_GetFile: function (fileEntry) {
-      app.myRecorder = new Media( fileEntry.fullPath, 
+      app.myRecorder = new Media( "documents://" + fileEntry.fullPath, 
                               app.onMediaSuccessCallback, 
                               app.onMediaErrorCallback);
       app.recordNow();
@@ -248,9 +256,12 @@ var app = {
       // audio filename for this page
       var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
       if (device.platform === "Android") {
-          filename = cordova.file.externalDataDirectory + filename;
+        filename = cordova.file.externalDataDirectory + filename;
+      } else {
+        filename = "documents://" + filename;
       }
-      var my_media = new Media(filename,null, null);
+
+      var my_media = new Media(filename, function () { alert("played ok"); }, function (error) { alert("error: " + error.message);});
       my_media.play();
     },
     // My voice! :)
