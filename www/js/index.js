@@ -18,13 +18,11 @@
    */
 var app = {
 
-    // var currxPage = 0;
     myRecorder: null,
     extension: "wav",
-    currPageIndex: 0,
-    currFilename: null,
     device: null,
-    recTime: 0,
+    currPageIndex: 0,
+    extPath: "",
     page_ids: [ "Page_01",
                 "Page_02",
                 "Page_03",
@@ -89,13 +87,19 @@ var app = {
       console.log('Received Event: ' + id);
     },
     // Start function
-    start: function () {
-      // Prevent vertical scrolling - problem seen on devices only. Works fine on chrome without this.
-      // http://stackoverflow.com/questions/6193016/how-to-prevent-app-running-in-phone-gap-from-scrolling-vertically
+    start: function () {      
 
-      // FIXME: THIS BREAKS THE SCROLLING IN RIPPLE. WORKS FINE ON THE DEVICE!
-      //document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
-      // $.mobile.defaultPageTransition = 'slide';
+      // Initialize global consts
+
+      // app.extPath stores the external loc where custom recording is saved.
+      if (device.platform === "Android") {
+        app.extPath = cordova.file.externalDataDirectory;
+      } else {
+        // Assume iOS
+        app.extPath = cordova.file.applicationStorageDirectory + "Documents/";
+      }
+      
+      // Setup the button handlers
       app.registerPageSwipeHandlers();
       app.registerBtnHandlers();
     },
@@ -114,37 +118,24 @@ var app = {
     },
     // Play, Record and Reset Btn Handlers
     registerBtnHandlers: function () {
-      $(".playBtn").on("click", function (){
-        var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
-
-        // Get the custom location first
-        if (device.platform === "Android") {
-          filename = cordova.file.externalDataDirectory + filename;
-        } else {
-          filename = cordova.file.applicationStorageDirectory + "Documents/" + filename;
-        }
-
+      $(".playBtn").on("click", function () {
         // If custom recording exists, play it. Else play default sound.
-        window.resolveLocalFileSystemURL(filename, app.playCustom, app.playDefault);
+        window.resolveLocalFileSystemURL( app.extPath + app.getCurrentFileName(), 
+                                          app.playCustom, 
+                                          app.playDefault);
       }); 
-      $(".recordBtn").on("click", function (event) {
+      $(".recordBtn").on("click", function () {
         $("#micRecording").toggleClass("fa fa-x fa-circle");
-        app.blinkMic();
 
         if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
-          // Start recording                
-          app.currFilename = app.page_ids[app.currPageIndex] + "." + app.extension;
-          // For android, we need to include the correct path. 
-          var filePath = "";
-          if (device.platform === "Android") {
-            filePath = cordova.file.externalDataDirectory;
-            app.currFilename = filePath + app.currFilename;
-          }
+          app.blinkMic();
+
           if (app.myRecorder) {
             app.myRecorder.release();
           }
+
           if (device.platform === "Android") {
-            app.myRecorder = new Media(app.currFilename,
+            app.myRecorder = new Media(app.extPath + app.getCurrentFileName(),
                                 app.onMediaSuccessCallback(),
                                 app.onMediaErrorCallback());
             app.recordNow();
@@ -154,23 +145,22 @@ var app = {
                                     0, 
                                     app.onSuccessFileSystem, 
                                     function () {
-	           alert("failed: creating media file in requestFileSystem");
-  	        });
+             alert("failed: creating media file in requestFileSystem");
+            });
           }     
         } else {
-          //app.stopRecording();
+          //Do nothing. 
         }
       });
       $(".undoBtn").on("click", function (event){
-        var externalFilename = app.getExternalFilename();
-
         // Does this exist?
-        window.resolveLocalFileSystemURL(   externalFilename,
+        window.resolveLocalFileSystemURL(   app.extPath + app.getCurrentFileName(),
                                             app.gotRemoveFileEntry,
                                             app.failToDelete);
 
-        window.plugins.toast.showLongTop("Replaced recording with the default one", null, null);
-
+        window.plugins.toast.showLongTop( "Replaced recording with the default one", 
+                                          null, 
+                                          null);
       });
       $(".flipNext").on("click", function (event){
         app.goToNextPage();
@@ -197,18 +187,18 @@ var app = {
     },
     /* for iOS only */
     onSuccessFileSystem: function (fileSystem) {
-      fileSystem.root.getFile(app.currFilename,
+      fileSystem.root.getFile(app.getCurrentFileName(),
                               { create: true, exclusive: false },
                               app.onOK_GetFile,
                               function () {
-                              alert("Failed to create file!");
+                                alert("Failed to create file!");
                               });
     },
     onMediaSuccessCallback: function () {
-      alert("onMediaSuccessCallback: Recording complete!");
+      //alert("onMediaSuccessCallback: Recording complete!");
     },
     onMediaErrorCallback: function (error) {
-      alert("onMediaErrorCallback: Recording failed: " + error.message);
+      //alert("onMediaErrorCallback: Recording failed: " + error.message);
     },
     /* for iOS only */
     onOK_GetFile: function (fileEntry) {
@@ -227,58 +217,57 @@ var app = {
       }
       
       //Reset the recording time
-      app.recTime = 0;
+      var secs = 0;
       
       // Stop recording after 5 sec
-	    var progressTimer = setInterval (function () {
-        app.recTime = app.recTime + 1;
-        app.setRecordingText(app.recTime + " sec");
-        if (app.recTime >= 5) {
+      var progressTimer = setInterval (function () {
+        secs = secs + 1;
+        app.setRecordingText(secs + " sec");
+        if (secs >= 5) {
           clearInterval(progressTimer);
           progressTimer = null;
-        	app.stopRecording();
+          app.stopRecording();
           app.setRecordingText("");
-        	return;
+          return;
         }
-	    }, 1000);
+      }, 1000);
     },
     /* common function that stops the recording */
     stopRecording: function () {
       if (app.myRecorder) {
-  			app.myRecorder.stopRecord();
-  			app.myRecorder.release();
-  			app.myRecorder = null;
+        app.myRecorder.stopRecord();
+        app.myRecorder.release();
+        app.myRecorder = null;
         $("#micRecording").toggleClass("fa fa-x fa-circle");
-	    }
+      }
     },
     // If the child has recorded his own voice
     playCustom: function () {
-      // audio filename for this page
-      var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
+      // audio file name for this page
+      var fileName = app.getCurrentFileName();
       if (device.platform === "Android") {
-        filename = cordova.file.externalDataDirectory + filename;
+        fileName = app.extPath + fileName;
       } else {
-        filename = "documents://" + filename;
+        fileName = "documents://" + fileName;
       }
 
-      var my_media = new Media(filename, function () { alert("played ok"); }, function (error) { alert("error: " + error.message);});
+      var my_media = new Media(fileName, 
+                              function () { 
+                                //alert("played ok"); 
+                              }, 
+                              function (error) { 
+                                alert("error: " + error.message);
+                              });
       my_media.play();
     },
     // My voice! :)
     playDefault: function () {
-      var url = "audio/" + $("div[data-role='content']").attr("id") + "." + app.extension;
+      var url = "audio/" + app.getCurrentFileName();
       if (device.platform === "Android") {
           url = "/android_asset/www/" + url;
       }
       var my_media = new Media(url,null, null);
       my_media.play();
-    },
-    getExternalFilename: function () {
-      var filename = $("div[data-role='content']").attr("id") + "." + app.extension;
-      if (device.platform === "Android") {
-          filename = cordova.file.externalDataDirectory + filename;
-      }
-      return filename;
     },
     gotRemoveFileEntry: function (fileEntry) {
       fileEntry.remove(app.deleteFileSuccess, app.deleteFilefail);
@@ -286,7 +275,6 @@ var app = {
     deleteFileSuccess: function () {
     },
     deleteFilefail: function(error) {
-      alert("inside deleteFilefail");
       alert("Failed to delete a file: " + error.code);
     },
     failToDelete: function() {
@@ -297,5 +285,9 @@ var app = {
     // Displays 1...2...3...4...5
     setRecordingText: function (text){
       $('#audio_position').text(text);
+    },
+    getCurrentFileName: function () {
+      var fileName = $("div[data-role='content']").attr("id") + "." + app.extension;
+      return fileName;
     }
 };
