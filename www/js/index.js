@@ -16,6 +16,11 @@
    * specific language governing permissions and limitations
    * under the License.
    */
+   
+  /*
+   * (c) Devendra
+   */
+   
 var app = {
 
     myRecorder: null,
@@ -124,23 +129,27 @@ var app = {
                                           app.playCustom, 
                                           app.playDefault);
       }); 
+      // Record: Record user's voice
       $(".recordBtn").on("click", function () {
         $("#micRecording").toggleClass("fa fa-x fa-circle");
 
         if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
+          // Start flashing a red dot to indicate recording started
           app.blinkMic();
 
+          // Clear any past recordings
           if (app.myRecorder) {
             app.myRecorder.release();
           }
 
+          // For Android, the Media plugin will create the file if reqd
           if (device.platform === "Android") {
             app.myRecorder = new Media(app.extPath + app.getCurrentFileName(),
                                 app.onMediaSuccessCallback(),
                                 app.onMediaErrorCallback());
             app.recordNow();
           } else {
-            //assume iOS, first create the file
+            // But for iOS, we need to create the file first
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 
                                     0, 
                                     app.onSuccessFileSystem, 
@@ -152,6 +161,7 @@ var app = {
           //Do nothing. 
         }
       });
+      // Undo: Delete the audio file recorded by user, if it exists.
       $(".undoBtn").on("click", function (event){
         // Does this exist?
         window.resolveLocalFileSystemURL(   app.extPath + app.getCurrentFileName(),
@@ -162,6 +172,7 @@ var app = {
                                           null, 
                                           null);
       });
+      // Prev and Next Arrows
       $(".flipNext").on("click", function (event){
         app.goToNextPage();
       });
@@ -169,12 +180,13 @@ var app = {
         app.goToPrevPage();
       });
     },
+    // Page navigation: Set the ID attribute to 'change' the page
     goToNextPage: function () {
       if (app.currPageIndex < app.page_ids.length -1 ) {
         var pageElement = $("#" + app.page_ids[app.currPageIndex]); 
         pageElement.attr("id", app.page_ids[++app.currPageIndex]);
       } else {
-        alert("Last page: " + app.currPageIndex + " " + app.page_ids[app.currPageIndex]);
+        //alert("Last page: " + app.currPageIndex + " " + app.page_ids[app.currPageIndex]);
       }
     },
     goToPrevPage: function () {
@@ -182,16 +194,17 @@ var app = {
         var pageElement = $("#" + app.page_ids[app.currPageIndex]);
         pageElement.attr("id", app.page_ids[--app.currPageIndex]);   
       } else {
-        alert("First page: " + app.currPageIndex);
+        //alert("First page: " + app.currPageIndex);
       }
     },
-    /* for iOS only */
+    // Create the file that will be used to record audio (iOS only)
     onSuccessFileSystem: function (fileSystem) {
       fileSystem.root.getFile(app.getCurrentFileName(),
                               { create: true, exclusive: false },
                               app.onOK_GetFile,
                               function () {
                                 alert("Failed to create file!");
+                                return;
                               });
     },
     onMediaSuccessCallback: function () {
@@ -200,14 +213,14 @@ var app = {
     onMediaErrorCallback: function (error) {
       //alert("onMediaErrorCallback: Recording failed: " + error.message);
     },
-    /* for iOS only */
+    // File is created inside Documents folder, can record now! 
     onOK_GetFile: function (fileEntry) {
       app.myRecorder = new Media( "documents://" + fileEntry.fullPath, 
                               app.onMediaSuccessCallback, 
                               app.onMediaErrorCallback);
       app.recordNow();
     },
-    /* common function that starts the recording */
+    // Common function that starts the recording for iOS and Android
     recordNow: function () {
       if (app.myRecorder) {
         app.myRecorder.startRecord();
@@ -232,7 +245,7 @@ var app = {
         }
       }, 1000);
     },
-    /* common function that stops the recording */
+    // Common function that stops the recording for iOS and Android
     stopRecording: function () {
       if (app.myRecorder) {
         app.myRecorder.stopRecord();
@@ -248,15 +261,16 @@ var app = {
       if (device.platform === "Android") {
         fileName = app.extPath + fileName;
       } else {
+        // Media plugin needs the documents://!
         fileName = "documents://" + fileName;
       }
-
+      
       var my_media = new Media(fileName, 
                               function () { 
                                 //alert("played ok"); 
                               }, 
                               function (error) { 
-                                alert("error: " + error.message);
+                                alert("Error playing media: " + error.message);
                               });
       my_media.play();
     },
@@ -269,6 +283,7 @@ var app = {
       var my_media = new Media(url,null, null);
       my_media.play();
     },
+    // Various callbacks to remove audio recorded by user
     gotRemoveFileEntry: function (fileEntry) {
       fileEntry.remove(app.deleteFileSuccess, app.deleteFilefail);
     },
@@ -279,6 +294,7 @@ var app = {
     },
     failToDelete: function() {
     },
+    // Display a flashing red dot
     blinkMic: function() {
       $('.fa-circle').delay(100).fadeTo(100,0.5).delay(100).fadeTo(100,1, app.blinkMic);
     },
@@ -286,6 +302,7 @@ var app = {
     setRecordingText: function (text){
       $('#audio_position').text(text);
     },
+    // Audio file for the current page
     getCurrentFileName: function () {
       var fileName = $("div[data-role='content']").attr("id") + "." + app.extension;
       return fileName;
