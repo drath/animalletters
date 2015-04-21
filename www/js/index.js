@@ -130,7 +130,13 @@ var app = {
                                           app.playDefault);
       }); 
       // Record: Record user's voice
-      $(".recordBtn").on("click", function () {
+      $(".recordBtn").on("click", function (event) {
+        // If the mic is in recording state, do nothing.
+        if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
+          event.preventDefault();
+          return;
+        }
+
         $("#micRecording").toggleClass("fa fa-x fa-circle");
 
         if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
