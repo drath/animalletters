@@ -130,7 +130,13 @@ var app = {
                                           app.playDefault);
       }); 
       // Record: Record user's voice
-      $(".recordBtn").on("click", function () {
+      $(".recordBtn").on("click", function (event) {
+        // If the mic is in recording state, do nothing.
+        if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
+          event.preventDefault();
+          return;
+        }
+
         $("#micRecording").toggleClass("fa fa-x fa-circle");
 
         if ($("#micRecording").attr("class").indexOf("fa-circle") >= 0) {
@@ -276,7 +282,8 @@ var app = {
     },
     // My voice! :)
     playDefault: function () {
-      var url = "audio/" + app.getCurrentFileName();
+      // We play mp3, but record wav. iOS cannot record to mp3. 
+      var url = "audio/" + $("div[data-role='content']").attr("id") + ".mp3";
       if (device.platform === "Android") {
           url = "/android_asset/www/" + url;
       }
